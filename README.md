@@ -7,4 +7,5 @@ Simple C HTTP server
 ```console 
 $ make
 $ ./main 
+$ w3m http://localhost:8080
 ```

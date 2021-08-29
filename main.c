@@ -1,3 +1,5 @@
+#define _POSIX_C_SOURCE 200809L
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -46,14 +48,24 @@ int main(void)
             exit(1);
         }
 
-        char hypertext[] = "<html><head><title>YO</title></head><body>This is a C HTTP server response</body></html>";
+        /* dprintf(client_fd, "HTTP/1.1 200 OK\r\n"); */
+        /* dprintf(client_fd, "Content-Type: text/html; charset=charset=ASCII\r\n"); */
+        /* dprintf(client_fd, "Server: C HTTP Server\r\n"); */
+        /* /1* dprintf(client_fd, "Content-Length: %lu\r\n", strlen(hypertext)); *1/ */
+        /* dprintf(client_fd, "\r\n"); */
+        /* dprintf(client_fd, "%s\r\n", hypertext); */
 
-        dprintf(client_fd, "HTTP/1.1 200 OK\r\n");
-        dprintf(client_fd, "Content-Type: text/html; charset=charset=ASCII\r\n");
-        dprintf(client_fd, "Server: C HTTP Server\r\n");
-        dprintf(client_fd, "Content-Length: %lu\r\n", strlen(hypertext));
-        dprintf(client_fd, "\r\n");
-        dprintf(client_fd, "%s\r\n", hypertext);
+        char hypertext[] = 
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: text/html; charset=charset=ASCII\r\n"
+        "Server: C HTTP Server\r\n"
+        "\r\n" 
+        "<html><head><title>YO</title></head><body>This is a C HTTP server response</body></html>";
+
+        if(write(client_fd, hypertext, sizeof(hypertext)) < 0) {
+            fprintf(stderr, "Could not close the client socket %d: %s\n", client_fd, strerror(errno));
+            exit(1);
+        }
 
         if(close(client_fd) < 0) {
             fprintf(stderr, "Could not close the client socket %d: %s\n", client_fd, strerror(errno));
